@@ -12,6 +12,10 @@ public class ContactHelper extends HelperBase {
         super(wd);
     }
 
+    public void gotoCreateContactPage() {
+        click(By.linkText("add new"));
+    }
+
     public void fillCreateContactForm(ContactData contactData, boolean creation) {
         type(By.name("firstname"), contactData.getFirstName());
         type(By.name("lastname"), contactData.getLastName());
@@ -22,9 +26,19 @@ public class ContactHelper extends HelperBase {
         type(By.name("email"), contactData.getEmailAddress());
 
         if (creation) {
-            new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
+            if (isElementPresent(By.xpath("//select[@name='new_group']"))) {
+                Select groupDropdown = new Select(wd.findElement(By.xpath("//select[@name='new_group']")));
+                if (isElementPresent(By.xpath("//select[@name='new_group']/option[text()='" + contactData.getGroup() + "']"))) {
+                    groupDropdown.selectByVisibleText(contactData.getGroup());
+                } else {
+                    groupDropdown.selectByVisibleText("[none]");
+                }
+
+            } else {
+                Assert.fail("Group dropdown is not displayed on Group Creation form");
+            }
         } else {
-            Assert.assertFalse(isElementPresent(By.name("new_group")));
+            Assert.assertFalse(isElementPresent(By.xpath("//select[@name='new_group']")), "Group dropdown is displayed on Group Update form");
         }
     }
 
@@ -57,5 +71,22 @@ public class ContactHelper extends HelperBase {
 
     public void confirmContactDeletion() {
         wd.switchTo().alert().accept();
+    }
+
+    public void createContact(ContactData contactData) {
+        gotoCreateContactPage();
+        fillCreateContactForm(contactData, true);
+        submitContactCreation();
+        returnToHomePage();
+
+    }
+
+    public boolean isThereAContact() {
+        if (isElementPresent(By.xpath("//table[@id='maintable']//tr[@name='entry']"))) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }
