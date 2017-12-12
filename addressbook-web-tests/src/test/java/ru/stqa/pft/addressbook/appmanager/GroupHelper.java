@@ -55,11 +55,7 @@ public class GroupHelper extends HelperBase {
     }
 
     public boolean isThereAGroup() {
-        if (isElementPresent(By.xpath("//span[@class='group']"))) {
-            return true;
-        } else {
-            return false;
+        return isElementPresent(By.xpath("//span[@class='group']"));
         }
 
-    }
 }

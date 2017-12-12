@@ -82,11 +82,6 @@ public class ContactHelper extends HelperBase {
     }
 
     public boolean isThereAContact() {
-        if (isElementPresent(By.xpath("//table[@id='maintable']//tr[@name='entry']"))) {
-            return true;
-        } else {
-            return false;
-        }
-
+        return isElementPresent(By.xpath("//table[@id='maintable']//tr[@name='entry']"));
     }
 }
