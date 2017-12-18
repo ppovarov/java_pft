@@ -2,9 +2,13 @@ package ru.stqa.pft.addressbook.appmanager;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ContactHelper extends HelperBase {
 
@@ -46,8 +50,8 @@ public class ContactHelper extends HelperBase {
         click(By.xpath("//div[@id='content']/form/input[21]"));
     }
 
-    public void clickEditContact() {
-        click(By.xpath("//table[@id='maintable']/tbody/tr[2]/td[8]/a/img"));
+    public void clickEditContact(int index) {
+        getContactsTable().get(index).findElement(By.xpath("td[8]/a")).click();
     }
 
     public void returnToHomePage() {
@@ -58,11 +62,11 @@ public class ContactHelper extends HelperBase {
         click(By.name("update"));
     }
 
-    public void selectContact() {
-        if (!wd.findElement(By.name("selected[]")).isSelected()) {
-            click(By.name("selected[]"));
+    public void selectContact(int index) {
+        WebElement checkbox = getContactsTable().get(index).findElement(By.tagName("input"));
+        if (!checkbox.isSelected()) {
+            checkbox.click();
         }
-
     }
 
     public void clickDeleteContact() {
@@ -84,4 +88,22 @@ public class ContactHelper extends HelperBase {
     public boolean isThereAContact() {
         return isElementPresent(By.xpath("//table[@id='maintable']//tr[@name='entry']"));
     }
+
+    public List<ContactData> getContactList() {
+        List<ContactData> contacts = new ArrayList<ContactData>();
+        List<WebElement> elements = getContactsTable();
+        for (WebElement element : elements) {
+            int id = Integer.parseInt(element.findElement(By.xpath("td[1]/input")).getAttribute("id"));
+            String lastName = element.findElement(By.xpath("td[2]")).getText();
+            String firstName = element.findElement(By.xpath("td[3]")).getText();
+            contacts.add(new ContactData(id, firstName, lastName));
+        }
+        return contacts;
+    }
+
+    private List<WebElement> getContactsTable() {
+        return wd.findElements(By.xpath("//table[@id='maintable']//tr[@name='entry']"));
+
+    }
 }
+
