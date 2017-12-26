@@ -6,8 +6,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
+import ru.stqa.pft.addressbook.model.Contacts;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ContactHelper extends HelperBase {
@@ -18,6 +18,14 @@ public class ContactHelper extends HelperBase {
 
     public void gotoCreateContactPage() {
         click(By.linkText("add new"));
+    }
+
+    public void returnToHomePage() {
+        click(By.linkText("home page"));
+    }
+
+    private void gotoToHomePage() {
+        click(By.linkText("home"));
     }
 
     public void fillCreateContactForm(ContactData contactData, boolean creation) {
@@ -50,20 +58,16 @@ public class ContactHelper extends HelperBase {
         click(By.xpath("//div[@id='content']/form/input[21]"));
     }
 
-    public void clickEditContact(int index) {
-        getContactsTable().get(index).findElement(By.xpath("td[8]/a")).click();
-    }
-
-    public void returnToHomePage() {
-        click(By.linkText("home page"));
+    public void clickEditContactById(int id) {
+        wd.findElement(By.xpath("//a[@href='edit.php?id=" + id + "']")).click();
     }
 
     public void submitContactUpdate() {
         click(By.name("update"));
     }
 
-    public void selectContact(int index) {
-        WebElement checkbox = getContactsTable().get(index).findElement(By.tagName("input"));
+    private void selectContactById(int id) {
+        WebElement checkbox = wd.findElement(By.cssSelector("input[value='" + id + "']"));
         if (!checkbox.isSelected()) {
             checkbox.click();
         }
@@ -77,7 +81,7 @@ public class ContactHelper extends HelperBase {
         wd.switchTo().alert().accept();
     }
 
-    public void createContact(ContactData contactData) {
+    public void create(ContactData contactData) {
         gotoCreateContactPage();
         fillCreateContactForm(contactData, true);
         submitContactCreation();
@@ -85,25 +89,34 @@ public class ContactHelper extends HelperBase {
 
     }
 
+    public void delete(ContactData contact) {
+        selectContactById(contact.getId());
+        clickDeleteContact();
+        confirmContactDeletion();
+        gotoToHomePage();
+    }
+
+    public void modify(ContactData contact) {
+        clickEditContactById(contact.getId());
+        fillCreateContactForm(contact, false);
+        submitContactUpdate();
+        returnToHomePage();
+    }
+
     public boolean isThereAContact() {
         return isElementPresent(By.xpath("//table[@id='maintable']//tr[@name='entry']"));
     }
 
-    public List<ContactData> getContactList() {
-        List<ContactData> contacts = new ArrayList<ContactData>();
-        List<WebElement> elements = getContactsTable();
+    public Contacts all() {
+        Contacts contacts = new Contacts();
+        List<WebElement> elements = wd.findElements(By.xpath("//table[@id='maintable']//tr[@name='entry']"));
         for (WebElement element : elements) {
             int id = Integer.parseInt(element.findElement(By.xpath("td[1]/input")).getAttribute("id"));
             String lastName = element.findElement(By.xpath("td[2]")).getText();
             String firstName = element.findElement(By.xpath("td[3]")).getText();
-            contacts.add(new ContactData(id, firstName, lastName));
+            contacts.add(new ContactData().withID(id).withFirstName(firstName).withLastName(lastName));
         }
         return contacts;
-    }
-
-    private List<WebElement> getContactsTable() {
-        return wd.findElements(By.xpath("//table[@id='maintable']//tr[@name='entry']"));
-
     }
 }
 
