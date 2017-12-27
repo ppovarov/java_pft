@@ -110,10 +110,15 @@ public class ContactHelper extends HelperBase {
         return isElementPresent(By.xpath("//table[@id='maintable']//tr[@name='entry']"));
     }
 
+    public int count() {
+        return wd.findElements(By.xpath("//table[@id='maintable']//tr[@name='entry']")).size();
+    }
+
+
     private Contacts contactCache = null;
 
     public Contacts all() {
-        if (contactCache != null){
+        if (contactCache != null) {
             return new Contacts(contactCache);
         }
 
@@ -127,5 +132,6 @@ public class ContactHelper extends HelperBase {
         }
         return new Contacts(contactCache);
     }
+
 }
 
