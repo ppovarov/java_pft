@@ -1,26 +1,38 @@
 package ru.stqa.pft.addressbook.tests;
 
-import org.testng.Assert;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
 
 import java.io.File;
-import java.util.Comparator;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ContactCreationTests extends TestBase {
 
-    @Test
-    public void testContactCreation() {
+    @DataProvider
+    public Iterator<Object[]> validContacts() throws IOException {
+        Reader reader = new FileReader(new File("src/test/resources/contacts.json"));
+        Gson gson = new Gson();
+        List<ContactData> contacts = gson.fromJson(reader, new TypeToken<List<ContactData>>(){}.getType());
+        return contacts.stream().map((c) -> new Object[]{c}).collect(Collectors.toList()).iterator();
+    }
 
+    @Test(dataProvider = "validContacts")
+    public void testContactCreation(ContactData contact) {
         Contacts before = app.contact().all();
         File photo = new File("src/test/resources/icon.png");
-        ContactData contact = new ContactData().withFirstName("fname").withLastName("lname").withAddress("address").withHomePhone("1111111111")
-                .withMobilePhone("2222222222").withWorkPhone("3333333333").withEmail("username@domain.com").withGroup("test1")
-                .withPhoto(photo);
+        contact.withPhoto(photo);
 
         app.contact().create(contact);
 

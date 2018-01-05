@@ -1,5 +1,15 @@
 [
   {
+    "firstName": "firstname 0",
+    "lastName": "lastname 0",
+    "address": "0 Broadway",
+    "homePhone": "(111)111-11-11 ",
+    "mobilePhone": "  222 222 22 22",
+    "workPhone": "+7(333)333-3333",
+    "email": "username0@domain.com",
+    "group": "test_0"
+  },
+  {
     "firstName": "firstname 1",
     "lastName": "lastname 1",
     "address": "1 Broadway",
@@ -28,65 +38,5 @@
     "workPhone": "+7(333)333-3333",
     "email": "username3@domain.com",
     "group": "test_3"
-  },
-  {
-    "firstName": "firstname 4",
-    "lastName": "lastname 4",
-    "address": "4 Broadway",
-    "homePhone": "(111)111-11-11 ",
-    "mobilePhone": "  222 222 22 22",
-    "workPhone": "+7(333)333-3333",
-    "email": "username4@domain.com",
-    "group": "test_4"
-  },
-  {
-    "firstName": "firstname 5",
-    "lastName": "lastname 5",
-    "address": "5 Broadway",
-    "homePhone": "(111)111-11-11 ",
-    "mobilePhone": "  222 222 22 22",
-    "workPhone": "+7(333)333-3333",
-    "email": "username5@domain.com",
-    "group": "test_5"
-  },
-  {
-    "firstName": "firstname 6",
-    "lastName": "lastname 6",
-    "address": "6 Broadway",
-    "homePhone": "(111)111-11-11 ",
-    "mobilePhone": "  222 222 22 22",
-    "workPhone": "+7(333)333-3333",
-    "email": "username6@domain.com",
-    "group": "test_6"
-  },
-  {
-    "firstName": "firstname 7",
-    "lastName": "lastname 7",
-    "address": "7 Broadway",
-    "homePhone": "(111)111-11-11 ",
-    "mobilePhone": "  222 222 22 22",
-    "workPhone": "+7(333)333-3333",
-    "email": "username7@domain.com",
-    "group": "test_7"
-  },
-  {
-    "firstName": "firstname 8",
-    "lastName": "lastname 8",
-    "address": "8 Broadway",
-    "homePhone": "(111)111-11-11 ",
-    "mobilePhone": "  222 222 22 22",
-    "workPhone": "+7(333)333-3333",
-    "email": "username8@domain.com",
-    "group": "test_8"
-  },
-  {
-    "firstName": "firstname 9",
-    "lastName": "lastname 9",
-    "address": "9 Broadway",
-    "homePhone": "(111)111-11-11 ",
-    "mobilePhone": "  222 222 22 22",
-    "workPhone": "+7(333)333-3333",
-    "email": "username9@domain.com",
-    "group": "test_9"
   }
 ]
