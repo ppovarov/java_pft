@@ -20,23 +20,23 @@ public class GroupCreationTests extends TestBase {
 
     @DataProvider
     public Iterator<Object[]> validGroupsFromXML() throws IOException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/groups.xml")))) {
-            String xml = "";
+        try (BufferedReader reader = new BufferedReader(new FileReader(new File(app.property("groups.xml.file"))))) {
+            StringBuilder xmlBuilder = new StringBuilder();
             String line = reader.readLine();
             while (line != null) {
-                xml += line;
+                xmlBuilder.append(line);
                 line = reader.readLine();
             }
             XStream xstream = new XStream();
             xstream.processAnnotations(GroupData.class);
-            List<GroupData> groups = (List<GroupData>) xstream.fromXML(xml);
+            List<GroupData> groups = (List<GroupData>) xstream.fromXML(xmlBuilder.toString());
             return groups.stream().map((g) -> new Object[]{g}).collect(Collectors.toList()).iterator();
         }
     }
 
     @DataProvider
     public Iterator<Object[]> validGroupsFromJSON() throws IOException {
-        try (Reader reader = new FileReader(new File("src/test/resources/groups.json"))) {
+        try (Reader reader = new FileReader(new File(app.property("groups.json.file")))) {
             Gson gson = new Gson();
             List<GroupData> groups = gson.fromJson(reader, new TypeToken<List<GroupData>>() {
             }.getType());
@@ -54,7 +54,7 @@ public class GroupCreationTests extends TestBase {
 
         assertThat(app.group().count(), equalTo(before.size() + 1));
         Groups after = app.group().all();
-        assertThat(after, equalTo(before.withAdded(group.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt()))));
+        assertThat(after, equalTo(before.withAdded(group.withId(after.stream().mapToInt(GroupData::getId).max().getAsInt()))));
     }
 
     @Test

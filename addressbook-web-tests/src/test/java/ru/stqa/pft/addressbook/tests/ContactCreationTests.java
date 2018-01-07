@@ -22,7 +22,8 @@ public class ContactCreationTests extends TestBase {
 
     @DataProvider
     public Iterator<Object[]> validContacts() throws IOException {
-        try (Reader reader = new FileReader(new File("src/test/resources/contacts.json"))) {
+        try (Reader reader = new FileReader(new File(app.property("contacts.json.file"))
+        )) {
             Gson gson = new Gson();
             List<ContactData> contacts = gson.fromJson(reader, new TypeToken<List<ContactData>>(){}.getType());
             return contacts.stream().map((c) -> new Object[]{c}).collect(Collectors.toList()).iterator();
@@ -31,8 +32,9 @@ public class ContactCreationTests extends TestBase {
 
     @Test(dataProvider = "validContacts")
     public void testContactCreation(ContactData contact) {
+        app.goTo().homePage();
         Contacts before = app.contact().all();
-        File photo = new File("src/test/resources/icon.png");
+        File photo = new File(app.property("photo.file"));
         contact.withPhoto(photo);
 
         app.contact().create(contact);
