@@ -205,6 +205,9 @@ public class ContactData {
     }
 
 
+    public boolean isInGroup (GroupData group){
+        return contactGroups.contains(group);
+    }
 
     @Override
     public String toString() {
@@ -212,11 +215,6 @@ public class ContactData {
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", address='" + address + '\'' +
-                ", homePhone='" + homePhone + '\'' +
-                ", mobilePhone='" + mobilePhone + '\'' +
-                ", workPhone='" + workPhone + '\'' +
-                ", email='" + email + '\'' +
                 '}';
     }
 
