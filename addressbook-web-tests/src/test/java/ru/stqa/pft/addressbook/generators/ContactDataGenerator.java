@@ -66,8 +66,7 @@ public class ContactDataGenerator {
                     .withHomePhone("(111)111-11-11 ")
                     .withMobilePhone("  222 222 22 22")
                     .withWorkPhone("+7(333)333-3333")
-                    .withEmail(String.format("username%s@domain.com", i))
-                    .withGroup(String.format("test_%s", i)));
+                    .withEmail(String.format("username%s@domain.com", i)));
         }
         return contacts;
     }

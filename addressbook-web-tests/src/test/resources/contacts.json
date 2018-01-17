@@ -6,8 +6,7 @@
     "homePhone": "(111)111-11-11 ",
     "mobilePhone": "  222 222 22 22",
     "workPhone": "+7(333)333-3333",
-    "email": "username0@domain.com",
-    "group": "test_0"
+    "email": "username0@domain.com"
   },
   {
     "firstName": "firstname 1",
@@ -16,8 +15,7 @@
     "homePhone": "(111)111-11-11 ",
     "mobilePhone": "  222 222 22 22",
     "workPhone": "+7(333)333-3333",
-    "email": "username1@domain.com",
-    "group": "test_1"
+    "email": "username1@domain.com"
   },
   {
     "firstName": "firstname 2",
@@ -26,17 +24,6 @@
     "homePhone": "(111)111-11-11 ",
     "mobilePhone": "  222 222 22 22",
     "workPhone": "+7(333)333-3333",
-    "email": "username2@domain.com",
-    "group": "test_2"
-  },
-  {
-    "firstName": "firstname 3",
-    "lastName": "lastname 3",
-    "address": "3 Broadway",
-    "homePhone": "(111)111-11-11 ",
-    "mobilePhone": "  222 222 22 22",
-    "workPhone": "+7(333)333-3333",
-    "email": "username3@domain.com",
-    "group": "test_3"
+    "email": "username2@domain.com"
   }
 ]

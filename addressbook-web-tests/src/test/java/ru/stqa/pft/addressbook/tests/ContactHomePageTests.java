@@ -16,7 +16,7 @@ public class ContactHomePageTests extends TestBase {
     @BeforeMethod
     private void ensurePreconditions() {
         app.goTo().homePage();
-        if (app.contact().all().size() == 0) {
+        if (app.db().contacts().size() == 0) {
             app.contact().create(new ContactData().withFirstName("fname").withLastName("lname"));
         }
     }

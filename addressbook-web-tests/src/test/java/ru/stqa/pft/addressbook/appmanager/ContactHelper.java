@@ -41,12 +41,12 @@ public class ContactHelper extends HelperBase {
         if (creation) {
             if (isElementPresent(By.xpath("//select[@name='new_group']"))) {
                 Select groupDropdown = new Select(wd.findElement(By.xpath("//select[@name='new_group']")));
-                if (isElementPresent(By.xpath(String.format("//select[@name='new_group']/option[text()='%s']", contactData.getGroup())))) {
-                    groupDropdown.selectByVisibleText(contactData.getGroup());
+                if (contactData.getContactGroups().size() > 0) {
+                    Assert.assertTrue(contactData.getContactGroups().size() == 1);
+                    groupDropdown.selectByVisibleText(contactData.getContactGroups().iterator().next().getName());
                 } else {
                     groupDropdown.selectByVisibleText("[none]");
                 }
-
             } else {
                 Assert.fail("Group dropdown is not displayed on Group Creation form");
             }

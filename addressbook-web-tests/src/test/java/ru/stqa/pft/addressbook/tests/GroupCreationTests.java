@@ -9,6 +9,7 @@ import ru.stqa.pft.addressbook.model.GroupData;
 import ru.stqa.pft.addressbook.model.Groups;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,26 +49,28 @@ public class GroupCreationTests extends TestBase {
     public void testGroupCreation(GroupData group) {
 
         app.goTo().groupPage();
-        Groups before = app.group().all();
+        Groups before = app.db().groups();
 
         app.group().create(group);
+        logger.info(String.format("Group %s is created", group));
 
         assertThat(app.group().count(), equalTo(before.size() + 1));
-        Groups after = app.group().all();
-        assertThat(after, equalTo(before.withAdded(group.withId(after.stream().mapToInt(GroupData::getId).max().getAsInt()))));
+        Groups after = app.db().groups();
+        assertThat(after, equalTo(before.withAdded(group.withId( after.stream().mapToInt(GroupData::getId).max().getAsInt() ))));
+        verifyGroupListInUI();
     }
 
     @Test
     public void testBadGroupCreation() {
 
         app.goTo().groupPage();
-        Groups before = app.group().all();
+        Groups before = app.db().groups();
         GroupData group = new GroupData().withName("test1'");
 
         app.group().create(group);
 
         assertThat(app.group().count(), equalTo(before.size()));
-        Groups after = app.group().all();
+        Groups after = app.db().groups();
         assertThat(after, equalTo(before));
     }
 
