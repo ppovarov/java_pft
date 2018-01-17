@@ -114,6 +114,12 @@ public class ContactHelper extends HelperBase {
         wd.findElement(By.xpath("//input[@name='add']")).click();
     }
 
+    public void deleteFromGroup(ContactData contact, GroupData group) {
+        new Select(wd.findElement(By.xpath("//select[@name='group']"))).selectByValue( String.valueOf(group.getId()) );
+        selectContactById(contact.getId());
+        wd.findElement(By.xpath("//input[@name='remove']")).click();
+    }
+
     public boolean isThereAContact() {
         return isElementPresent(By.xpath("//table[@id='maintable']//tr[@name='entry']"));
     }
