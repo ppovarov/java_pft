@@ -1,5 +1,6 @@
 package ru.stqa.pft.addressbook.tests;
 
+import com.sun.xml.internal.bind.v2.TODO;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
@@ -16,33 +17,39 @@ public class DeleteContactFromGroupTests extends TestBase {
 
     @BeforeMethod
     private void ensurePreconditions() {
-        if (app.db().groups().size() == 0) {
-            app.goTo().groupPage();
-            app.group().create(new GroupData().withName("test1"));
+
+        Contacts contacts = app.db().contacts();
+        if ( contacts.stream().noneMatch((c) -> c.getContactGroups().size() > 0) ){
+
+            GroupData group;
+            Groups groups = app.db().groups();
+            if (groups.size() == 0) {
+                group = new GroupData().withName("test1");
+                app.goTo().groupPage();
+                app.group().create(group);
+                groups = app.db().groups();
+            }
+            group = groups.iterator().next();
+
+            if (contacts.size() > 0) { //add existing contact to group
+                app.goTo().homePage();
+                app.contact().addToGroup(contacts.iterator().next(), group);
+            }
+            else{ // create new contact with group
+                app.goTo().homePage();
+                app.contact().create(new ContactData().withFirstName("fname").withLastName("lname").inGroup(group));
+            }
         }
     }
 
     @Test
     public void testDeletingContactFromGroup() {
 
-        Supplier<ContactData> contactSupplier = () -> {
-            Groups groups = app.db().groups();
-            ContactData newContact = new ContactData()
-                    .withFirstName("fname")
-                    .withLastName("lname")
-                    .inGroup(groups.iterator().next());
-            app.goTo().homePage();
-            app.contact().create(newContact);
-            Contacts after = app.db().contacts();
-            return newContact.withID(after.stream().mapToInt((c) -> (c.getId())).max().getAsInt());
-        };
-
-        Groups groups = app.db().groups();
         Contacts contacts = app.db().contacts();
-        logger.info(String.format("all groups = %s", groups));
         logger.info(String.format("all contacts = %s", contacts));
 
-        ContactData contact = contacts.stream().filter((c) -> c.getContactGroups().size() > 0 ).findFirst().orElseGet(contactSupplier);
+        ContactData contact = contacts.stream().filter((c) -> c.getContactGroups().size() > 0 ).findFirst()
+                .orElseThrow(() -> new IllegalStateException("No contact with group exists"));
         logger.info(String.format("contact to delete from group = %s", contact));
 
         Groups contactGroupsBefore = contact.getContactGroups();
@@ -50,16 +57,16 @@ public class DeleteContactFromGroupTests extends TestBase {
 
         GroupData group = contactGroupsBefore.iterator().next();
         logger.info(String.format("Deleting %s from %s", contact, group));
+
         app.goTo().homePage();
         app.contact().deleteFromGroup(contact, group);
 
         Groups contactGroupsAfter = app.db().contacts().stream()
-                .filter((c) -> c.getId() == contact.getId())
-                .findFirst().orElse(null)
+                .filter((c) -> c.getId() == contact.getId()).findFirst()
+                .orElseThrow(() -> new IllegalStateException(String.format("Contact with group_id = %s not exists", contact.getId())))
                 .getContactGroups();
         logger.info(String.format("contactGroupsAfter = %s", contactGroupsAfter));
 
         assertThat(contactGroupsAfter, equalTo(contactGroupsBefore.without(group)));
-
     }
 }

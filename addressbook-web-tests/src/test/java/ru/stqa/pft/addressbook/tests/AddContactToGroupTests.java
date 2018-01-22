@@ -16,28 +16,31 @@ public class AddContactToGroupTests extends TestBase {
 
     @BeforeMethod
     private void ensurePreconditions() {
-        if (app.db().groups().size() == 0) {
+
+        Groups groups = app.db().groups();
+        if (groups.size() == 0) {
             app.goTo().groupPage();
             app.group().create(new GroupData().withName("test1"));
+            groups = app.db().groups();
+        }
+
+        Contacts contacts = app.db().contacts();
+        int groupsCount = groups.size();
+        if ( contacts.stream().noneMatch((c) -> c.getContactGroups().size() < groupsCount) ){
+            app.goTo().homePage();
+            app.contact().create(new ContactData().withFirstName("fname").withLastName("lname"));
         }
     }
 
     @Test
     public void testAddingContactToGroup() {
 
-        Supplier<ContactData> contactSupplier = () -> {
-            ContactData newContact = new ContactData().withFirstName("fname").withLastName("lname");
-            app.goTo().homePage();
-            app.contact().create(newContact);
-            Contacts after = app.db().contacts();
-            return newContact.withID(after.stream().mapToInt((c) -> (c.getId())).max().getAsInt());
-        };
-
         Groups groups = app.db().groups();
         Contacts contacts = app.db().contacts();
         logger.info(String.format("all contacts = %s", contacts));
 
-        ContactData contact = contacts.stream().filter((c) -> c.getContactGroups().size() < groups.size()).findFirst().orElseGet(contactSupplier);
+        ContactData contact = contacts.stream().filter((c) -> c.getContactGroups().size() < groups.size()).findFirst()
+                .orElseThrow(() -> new IllegalStateException("No contact for adding to group exists"));
         logger.info(String.format("contact to add to group = %s", contact));
 
         Groups contactGroupsBefore = contact.getContactGroups();
@@ -56,7 +59,8 @@ public class AddContactToGroupTests extends TestBase {
 
         Groups contactGroupsAfter = app.db().contacts().stream()
                 .filter((c) -> c.getId() == contact.getId())
-                .findFirst().orElse(null)
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException(String.format("Contact with group_id = %s not exists", contact.getId())))
                 .getContactGroups();
         logger.info(String.format("contactGroupsAfter = %s", contactGroupsAfter));
 
