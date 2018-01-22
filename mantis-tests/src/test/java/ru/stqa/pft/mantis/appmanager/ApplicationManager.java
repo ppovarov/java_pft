@@ -14,10 +14,11 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 public class ApplicationManager {
-    WebDriver wd;
-    private final Properties properties;
 
+    private WebDriver wd;
+    private final Properties properties;
     private String browser;
+    private RegistrationHelper registratiobHelper;
 
     public ApplicationManager(String browser) {
         this.browser = browser;
@@ -27,26 +28,45 @@ public class ApplicationManager {
     public void init() throws IOException {
         String target = System.getProperty("target", "local");
         properties.load(new FileReader(new File(String.format("src/test/resources/%s.properties", target))));
-
-        if (browser.equals(BrowserType.FIREFOX)) {
-            wd = new FirefoxDriver(new FirefoxOptions().setLegacy(true));
-        } else if (browser.equals(BrowserType.CHROME)) {
-            wd = new ChromeDriver();
-        } else if (browser.equals(BrowserType.IE)) {
-            wd = new InternetExplorerDriver();
-        }
-
-        wd.manage().timeouts().implicitlyWait( Integer.parseInt(property("webdriver.wait")), TimeUnit.SECONDS);
-        wd.get(properties.getProperty("web.baseURL"));
-
     }
 
     public void stop() {
-        wd.quit();
+        if (wd != null){
+            wd.quit();
+        }
     }
 
-    public String property(String key) {
+    public String getProperty(String key) {
         return properties.getProperty(key);
     }
 
+    public HttpSession newSession(){
+        return new HttpSession(this);
+    }
+
+    public RegistrationHelper registration() {
+        if (registratiobHelper == null) {
+            registratiobHelper = new RegistrationHelper(this);
+        }
+        return registratiobHelper;
+    }
+
+    public WebDriver getDriver() {
+        if (wd == null){
+            switch (browser) {
+                case BrowserType.FIREFOX:
+                    wd = new FirefoxDriver(new FirefoxOptions().setLegacy(true));
+                    break;
+                case BrowserType.CHROME:
+                    wd = new ChromeDriver();
+                    break;
+                case BrowserType.IE:
+                    wd = new InternetExplorerDriver();
+                    break;
+            }
+            wd.manage().timeouts().implicitlyWait(Integer.parseInt(getProperty("webdriver.wait")), TimeUnit.SECONDS);
+            wd.get(properties.getProperty("web.baseURL"));
+        }
+        return wd;
+    }
 }
