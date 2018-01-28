@@ -19,6 +19,8 @@ public class ApplicationManager {
     private final Properties properties;
     private String browser;
     private RegistrationHelper registratiobHelper;
+    private FtpHelper ftpHelper;
+    private MailHelper mailHelper;
 
     public ApplicationManager(String browser) {
         this.browser = browser;
@@ -31,7 +33,7 @@ public class ApplicationManager {
     }
 
     public void stop() {
-        if (wd != null){
+        if (wd != null) {
             wd.quit();
         }
     }
@@ -40,7 +42,7 @@ public class ApplicationManager {
         return properties.getProperty(key);
     }
 
-    public HttpSession newSession(){
+    public HttpSession newSession() {
         return new HttpSession(this);
     }
 
@@ -51,8 +53,22 @@ public class ApplicationManager {
         return registratiobHelper;
     }
 
+    public FtpHelper ftp() {
+        if (ftpHelper == null) {
+            ftpHelper = new FtpHelper(this);
+        }
+        return ftpHelper;
+    }
+
+    public MailHelper mail() {
+        if (mailHelper == null) {
+            mailHelper = new MailHelper(this);
+        }
+        return mailHelper;
+    }
+
     public WebDriver getDriver() {
-        if (wd == null){
+        if (wd == null) {
             switch (browser) {
                 case BrowserType.FIREFOX:
                     wd = new FirefoxDriver(new FirefoxOptions().setLegacy(true));
