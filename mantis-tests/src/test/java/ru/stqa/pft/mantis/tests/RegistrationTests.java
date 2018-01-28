@@ -1,12 +1,7 @@
 package ru.stqa.pft.mantis.tests;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.lanwen.verbalregex.VerbalExpression;
-import ru.stqa.pft.mantis.appmanager.HttpSession;
 import ru.stqa.pft.mantis.model.MailMessage;
 
 import javax.mail.MessagingException;
@@ -30,12 +25,12 @@ public class RegistrationTests extends TestBase {
         String email = String.format("%s@localhost", user); //.localdomain
 
         app.james().createUser(user, password);
-        app.registration().start(user, email);
+        app.account().register(user, email);
         //List<MailMessage> mailMessages = app.mail().waitForMail(2, 10000);
         List<MailMessage> mailMessages = app.james().waitForMail(user, password, 60000);
         String confirmationLink = findConfirmationLink(mailMessages, email);
 
-        app.registration().finish(confirmationLink, password);
+        app.account().verify(confirmationLink, password);
         assertTrue(app.newSession().login(user, password));
     }
 

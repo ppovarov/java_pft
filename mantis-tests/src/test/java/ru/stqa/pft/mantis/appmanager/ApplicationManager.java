@@ -18,10 +18,11 @@ public class ApplicationManager {
     private WebDriver wd;
     private final Properties properties;
     private String browser;
-    private RegistrationHelper registratiobHelper;
+    private AccountHelper accountHelper;
     private FtpHelper ftpHelper;
     private MailHelper mailHelper;
     private JamesHelper jamesHelper;
+    private DbHelper dbHelper;
 
     public ApplicationManager(String browser) {
         this.browser = browser;
@@ -47,11 +48,11 @@ public class ApplicationManager {
         return new HttpSession(this);
     }
 
-    public RegistrationHelper registration() {
-        if (registratiobHelper == null) {
-            registratiobHelper = new RegistrationHelper(this);
+    public AccountHelper account() {
+        if (accountHelper == null) {
+            accountHelper = new AccountHelper(this);
         }
-        return registratiobHelper;
+        return accountHelper;
     }
 
     public FtpHelper ftp() {
@@ -75,6 +76,12 @@ public class ApplicationManager {
         return jamesHelper;
     }
 
+    public DbHelper db() {
+        if (dbHelper == null) {
+            dbHelper = new DbHelper(this);
+        }
+        return dbHelper;
+    }
 
 
     public WebDriver getDriver() {
