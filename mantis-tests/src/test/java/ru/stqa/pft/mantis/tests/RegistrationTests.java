@@ -19,6 +19,9 @@ public class RegistrationTests extends TestBase {
 
     @Test
     public void testRegistration() throws IOException, MessagingException {
+
+        skipIfNotFixed(1);
+
         long now = System.currentTimeMillis();
         String user = String.format("user%s", now);
         String password = "Password123";

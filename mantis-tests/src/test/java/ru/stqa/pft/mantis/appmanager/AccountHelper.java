@@ -1,7 +1,7 @@
 package ru.stqa.pft.mantis.appmanager;
 
 import org.openqa.selenium.By;
-import ru.stqa.pft.mantis.model.UserData;
+import ru.stqa.pft.mantis.model.User;
 
 public class AccountHelper extends HelperBase {
 
@@ -23,7 +23,7 @@ public class AccountHelper extends HelperBase {
         click(By.cssSelector("button[type='submit']"));
     }
 
-    public void changePassword(UserData user) {
+    public void changePassword(User user) {
         //login by admin
         wd.get(app.getProperty("web.baseURL") + "/login_page.php");
         type(By.name("username"), app.getProperty("web.adminLogin"));

@@ -3,7 +3,7 @@ package ru.stqa.pft.mantis.tests;
 import org.testng.annotations.Test;
 import ru.lanwen.verbalregex.VerbalExpression;
 import ru.stqa.pft.mantis.model.MailMessage;
-import ru.stqa.pft.mantis.model.UserData;
+import ru.stqa.pft.mantis.model.User;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
@@ -15,10 +15,14 @@ public class ChangePasswordTests extends  TestBase {
 
     @Test
     public void testChangePassword() throws IOException, MessagingException {
+
+        skipIfNotFixed(2);
+        skipIfNotFixed(3);
+
         String mantisUsername = "test";
         String newMantisPassword = "Password456";
 
-        UserData user = app.db().users().stream().filter((u)-> mantisUsername.equals(u.getUsername())).findFirst().get();
+        User user = app.db().users().stream().filter((u)-> mantisUsername.equals(u.getUsername())).findFirst().get();
 
         //String emailUsername = "test";
         String emailUsername = user.getEmail().split("@")[0];

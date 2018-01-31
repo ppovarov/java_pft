@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "mantis_user_table")
-public class UserData {
+public class User {
 
     @Id
     @Column(name = "id")
