@@ -16,8 +16,10 @@ public class ChangePasswordTests extends  TestBase {
     @Test
     public void testChangePassword() throws IOException, MessagingException {
 
-        skipIfNotFixed(2);
-        skipIfNotFixed(3);
+        skipIfNotFixed(780); // resolved
+        skipIfNotFixed(781); // closed
+        skipIfNotFixed(1000); // n/a
+        skipIfNotFixed(779); // open
 
         String mantisUsername = "test";
         String newMantisPassword = "Password456";

@@ -5,13 +5,10 @@ import org.testng.SkipException;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import ru.stqa.pft.mantis.appmanager.ApplicationManager;
-import ru.stqa.pft.mantis.model.Issue;
 
 import javax.xml.rpc.ServiceException;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.rmi.RemoteException;
 
 public class TestBase {
 
@@ -29,9 +26,10 @@ public class TestBase {
         app.stop();
     }
 
-    public boolean isIssueOpen(int issueId) throws RemoteException, ServiceException, MalformedURLException {
-        String status = app.soap().getIssue(issueId).getStatus();
-        return !(status.equals("resolved")||status.equals("closed"));
+    public boolean isIssueOpen(int issueId) throws IOException, ServiceException {
+        //String status = app.soap().getIssue(issueId).getStatus();
+        String status = app.bugify().getIssue(issueId).getStatus();
+        return !(status.equalsIgnoreCase("resolved") || status.equalsIgnoreCase("closed"));
     }
 
     public void skipIfNotFixed(int issueId) {
@@ -39,7 +37,7 @@ public class TestBase {
             if (isIssueOpen(issueId)) {
                 throw new SkipException("Ignored because of issue " + issueId);
             }
-        } catch (RemoteException | ServiceException | MalformedURLException e) {
+        } catch (IOException | ServiceException e) {
             e.printStackTrace();
         }
     }

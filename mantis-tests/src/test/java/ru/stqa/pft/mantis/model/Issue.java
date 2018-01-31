@@ -1,11 +1,18 @@
 package ru.stqa.pft.mantis.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Issue {
 
     private int id;
+
+    @SerializedName(value="summary", alternate="subject")
     private String summary;
+
     private String description;
     private Project project;
+
+    @SerializedName(value="status", alternate="state_name")
     private String status;
 
 

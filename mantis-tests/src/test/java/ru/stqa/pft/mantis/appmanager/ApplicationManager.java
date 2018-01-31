@@ -24,6 +24,7 @@ public class ApplicationManager {
     private JamesHelper jamesHelper;
     private DbHelper dbHelper;
     private SoapHelper soapHelper;
+    private BugifyRestHelper bugifyRestHelper;
 
     public ApplicationManager(String browser) {
         this.browser = browser;
@@ -89,6 +90,13 @@ public class ApplicationManager {
             soapHelper = new SoapHelper(this);
         }
         return soapHelper;
+    }
+
+    public BugifyRestHelper bugify() {
+        if (bugifyRestHelper == null) {
+            bugifyRestHelper = new BugifyRestHelper(this);
+        }
+        return bugifyRestHelper;
     }
 
     public WebDriver getDriver() {
