@@ -23,7 +23,7 @@ public class PointTests {
     public void testDistance3(){
         Point p1 = new Point(3,1);
         Point p2 = new Point(3,-1);
-        Assert.assertEquals(p1.distance(p2),2.0);
+        Assert.assertEquals(p1.distance(p2),12.0); // fail, really expected 2.0
     }
 
     @Test
